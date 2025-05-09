@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "plugins": {
+        "wcms-trumbowyg": {
+            "name": "Trumbowy gEditor",
+            "repo": "https://github.com/Phemisters/wcms-trumbowyg/tree/main",
+            "zip": "https://github.com/Phemisters/wcms-trumbowyg/archive/main.zip",
+            "summary": "Adds an WYSIWYG editor to all content editable fields.",
+            "version": "1.0.0",
+            "image": "https://raw.githubusercontent.com/Phemisters/wcms-trumbowyg/main/preview.jpg"
+        }
+    }
+}
