@@ -33,7 +33,7 @@ removeformatPasted: true,
 	],
 	plugins: {
 		upload: {
-            serverPath: 'plugins/wcms-editor/files.php',	    // Some upload plugin options, see details below
+            serverPath: 'plugins/wcms-trumbowyg/files.php',	    // Some upload plugin options, see details below
             error: function() {console.error("Error callback");},
 		},
 		table: {
