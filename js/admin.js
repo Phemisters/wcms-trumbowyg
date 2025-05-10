@@ -9,6 +9,7 @@ $(function() {
     var editElements = {};
     let timeoutSave;
 
+$.trumbowyg.svgPath = 'https://cdn.jsdelivr.net/npm/trumbowyg@2.31.0/dist/ui/icons.svg';
 $(document).ready(function() {
 	console.info("document ready");
 $('.editable').trumbowyg({
