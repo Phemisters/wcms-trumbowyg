@@ -11,7 +11,6 @@ $(function() {
 
 $.trumbowyg.svgPath = 'https://cdn.jsdelivr.net/npm/trumbowyg@2.31.0/dist/ui/icons.svg';
 $(document).ready(function() {
-	console.info("document ready");
 $('.editable').trumbowyg({
 removeformatPasted: true,
 
@@ -94,7 +93,6 @@ removeformatPasted: true,
 // Perform other work here ...
  
     function saveData(editor) {
-	    console.info("saveData called");
         if (editElements[editor.attr('id')]!=undefined) {
             // Confirmation popup for saving changes (set in the database)
             if (typeof saveChangesPopup !== 'undefined' && saveChangesPopup && !confirm('Save new changes?')) {

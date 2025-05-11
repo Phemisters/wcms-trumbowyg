@@ -239,7 +239,6 @@ var isUploading = false;
         isUploading = true;
 
         var data = new FormData();
-        console.info("file=" + file.name);
         //console.info("file=" + fileContents.byteLength);
         //var fileContents = await file.text();
         const enc = new TextDecoder("utf-8");
@@ -285,11 +284,9 @@ var isUploading = false;
                 },
 
                 success: function (data) {
-                    console.info("in success");
                     isUploading = false;
 
                     if (uploadPluginOptions.success) {
-                    console.info("bail out success: 1");
                         uploadPluginOptions.success(data, trumbowyg, $modal, values);
                         return;
                     }
@@ -300,12 +297,10 @@ var isUploading = false;
                             trumbowyg.lang[data.message]
                         );
                         trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
-                    console.info("bail out success: 2");
                         return;
                     }
 
                     var url = getDeep(data, uploadPluginOptions.urlPropertyName.split('.'));
-                    console.info("success with url " + url);
                     trumbowyg.execCmd('insertImage', url, false, true);
                     var $img = $('img[src="' + url + '"]:not([alt])', trumbowyg.$box);
                     $img.attr('alt', values.alt);
