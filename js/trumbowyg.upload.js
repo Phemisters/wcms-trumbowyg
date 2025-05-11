@@ -9,23 +9,24 @@
  * Mod by : Aleksandr-ru
  *          Twitter : @Aleksandr_ru
  *          Website : aleksandr.ru
+ * Modified for WonderCMS by David Smith
  */
 
 var isUploading = false;
-(function ($) {
+(function($) {
     'use strict';
 
     var defaultOptions = {
         serverPath: '',
         fileFieldName: 'fileToUpload',
-        data: [],                       // Additional data for ajax [{name: 'key', value: 'value'}]
-        headers: {},                    // Additional headers
-        xhrFields: {},                  // Additional fields
-        urlPropertyName: 'file',        // How to get url from the json response (for instance 'url' for {url: ....})
-        statusPropertyName: 'success',  // How to get status from the json response
-        success: undefined,             // Success callback: function (data, trumbowyg, $modal, values) {}
-        error: undefined,               // Error callback: function () {}
-        imageWidthModalEdit: false      // Add ability to edit image width
+        data: [], // Additional data for ajax [{name: 'key', value: 'value'}]
+        headers: {}, // Additional headers
+        xhrFields: {}, // Additional fields
+        urlPropertyName: 'file', // How to get url from the json response (for instance 'url' for {url: ....})
+        statusPropertyName: 'success', // How to get status from the json response
+        success: undefined, // Success callback: function (data, trumbowyg, $modal, values) {}
+        error: undefined, // Error callback: function () {}
+        imageWidthModalEdit: false // Add ability to edit image width
     };
 
     function getDeep(object, propertyParts) {
@@ -65,7 +66,7 @@ var isUploading = false;
         });
 
         // Progress
-        xhrRequest.upload.addEventListener('progress', function (e) {
+        xhrRequest.upload.addEventListener('progress', function(e) {
             options.progress(e);
         }, false);
 
@@ -198,10 +199,10 @@ var isUploading = false;
 
         plugins: {
             upload: {
-                init: function (trumbowyg) {
+                init: function(trumbowyg) {
                     trumbowyg.o.plugins.upload = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.upload || {});
                     var btnDef = {
-                        fn: function () {
+                        fn: function() {
                             trumbowyg.saveRange();
 
                             var file,
@@ -230,104 +231,103 @@ var isUploading = false;
                             // Prevent multiple submissions while uploading
                             isUploading = false;
 
-    function processAfterRead (trumbowyg, file, prefix,  values, fileContents) {
-        const uploadPluginOptions = trumbowyg.o.plugins.upload;
+                            function processAfterRead(trumbowyg, file, prefix, values, fileContents) {
+                                const uploadPluginOptions = trumbowyg.o.plugins.upload;
 
-        if (isUploading) {
-            return;
-        }
-        isUploading = true;
+                                if (isUploading) {
+                                    return;
+                                }
+                                isUploading = true;
 
-        var data = new FormData();
-        //console.info("file=" + fileContents.byteLength);
-        //var fileContents = await file.text();
-        const enc = new TextDecoder("utf-8");
-        var fileData = {
-          fileName: file.name,
-          contents: fileContents
-        };
-        data.append(uploadPluginOptions.fileFieldName, file.name);
-        data.append('fileContents', JSON.stringify(fileData));
+                                var data = new FormData();
+                                //console.info("file=" + fileContents.byteLength);
+                                //var fileContents = await file.text();
+                                const enc = new TextDecoder("utf-8");
+                                var fileData = {
+                                    fileName: file.name,
+                                    contents: fileContents
+                                };
+                                data.append(uploadPluginOptions.fileFieldName, file.name);
+                                data.append('fileContents', JSON.stringify(fileData));
 
-        uploadPluginOptions.data.map(function (cur) {
-            data.append(cur.name, cur.value);
-        });
+                                uploadPluginOptions.data.map(function(cur) {
+                                    data.append(cur.name, cur.value);
+                                });
 
-        $.map(values, function (curr, key) {
-            if (key !== 'file') {
-                data.append(key, curr);
-            }
-        });
+                                $.map(values, function(curr, key) {
+                                    if (key !== 'file') {
+                                        data.append(key, curr);
+                                    }
+                                });
 
-        if ($('.' + prefix + 'progress', $modal).length === 0) {
-            $('.' + prefix + 'modal-title', $modal)
-                .after(
-                    $('<div/>', {
-                        'class': prefix + 'progress'
-                    }).append(
-                        $('<div/>', {
-                            'class': prefix + 'progress-bar'
-                        })
-                    )
-                );
-        }
+                                if ($('.' + prefix + 'progress', $modal).length === 0) {
+                                    $('.' + prefix + 'modal-title', $modal)
+                                        .after(
+                                            $('<div/>', {
+                                                'class': prefix + 'progress'
+                                            }).append(
+                                                $('<div/>', {
+                                                    'class': prefix + 'progress-bar'
+                                                })
+                                            )
+                                        );
+                                }
 
-        runXhrRequest(
-            uploadPluginOptions.serverPath,
-            data,
-            {
-                headers: uploadPluginOptions.headers,
-                xhrFields: uploadPluginOptions.xhrFields,
+                                runXhrRequest(
+                                    uploadPluginOptions.serverPath,
+                                    data, {
+                                        headers: uploadPluginOptions.headers,
+                                        xhrFields: uploadPluginOptions.xhrFields,
 
-                progress: function (e) {
-                    $('.' + prefix + 'progress-bar').css('width', Math.round(e.loaded * 100 / e.total) + '%');
-                },
+                                        progress: function(e) {
+                                            $('.' + prefix + 'progress-bar').css('width', Math.round(e.loaded * 100 / e.total) + '%');
+                                        },
 
-                success: function (data) {
-                    isUploading = false;
+                                        success: function(data) {
+                                            isUploading = false;
 
-                    if (uploadPluginOptions.success) {
-                        uploadPluginOptions.success(data, trumbowyg, $modal, values);
-                        return;
-                    }
+                                            if (uploadPluginOptions.success) {
+                                                uploadPluginOptions.success(data, trumbowyg, $modal, values);
+                                                return;
+                                            }
 
-                    if (!getDeep(data, uploadPluginOptions.statusPropertyName.split('.'))) {
-                        trumbowyg.addErrorOnModalField(
-                            $('input[type=file]', $modal),
-                            trumbowyg.lang[data.message]
-                        );
-                        trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
-                        return;
-                    }
+                                            if (!getDeep(data, uploadPluginOptions.statusPropertyName.split('.'))) {
+                                                trumbowyg.addErrorOnModalField(
+                                                    $('input[type=file]', $modal),
+                                                    trumbowyg.lang[data.message]
+                                                );
+                                                trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg, data]);
+                                                return;
+                                            }
 
-                    var url = getDeep(data, uploadPluginOptions.urlPropertyName.split('.'));
-                    trumbowyg.execCmd('insertImage', url, false, true);
-                    var $img = $('img[src="' + url + '"]:not([alt])', trumbowyg.$box);
-                    $img.attr('alt', values.alt);
-                    if (uploadPluginOptions.imageWidthModalEdit && parseInt(values.width) > 0) {
-                        $img.attr({
-                            width: values.width
-                        });
-                    }
-                    trumbowyg.syncCode();
-                    setTimeout(function () {
-                        trumbowyg.closeModal();
-                    }, 250);
-                    trumbowyg.$c.trigger('tbwuploadsuccess', [trumbowyg, data, url]);
-                },
+                                            var url = getDeep(data, uploadPluginOptions.urlPropertyName.split('.'));
+                                            trumbowyg.execCmd('insertImage', url, false, true);
+                                            var $img = $('img[src="' + url + '"]:not([alt])', trumbowyg.$box);
+                                            $img.attr('alt', values.alt);
+                                            if (uploadPluginOptions.imageWidthModalEdit && parseInt(values.width) > 0) {
+                                                $img.attr({
+                                                    width: values.width
+                                                });
+                                            }
+                                            trumbowyg.syncCode();
+                                            setTimeout(function() {
+                                                trumbowyg.closeModal();
+                                            }, 250);
+                                            trumbowyg.$c.trigger('tbwuploadsuccess', [trumbowyg, data, url]);
+                                        },
 
-                error: uploadPluginOptions.error || function () {
-                    trumbowyg.addErrorOnModalField(
-                        $('input[type=file]', $modal),
-                        trumbowyg.lang.uploadError
-                    );
-                    trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg]);
+                                        error: uploadPluginOptions.error || function() {
+                                            trumbowyg.addErrorOnModalField(
+                                                $('input[type=file]', $modal),
+                                                trumbowyg.lang.uploadError
+                                            );
+                                            trumbowyg.$c.trigger('tbwuploaderror', [trumbowyg]);
 
-                    isUploading = false;
-                }
-            }
-        );
-    }
+                                            isUploading = false;
+                                        }
+                                    }
+                                );
+                            }
 
                             var $modal = trumbowyg.openModalInsert(
                                 // Title
@@ -337,17 +337,17 @@ var isUploading = false;
                                 fields,
 
                                 // Callback
-                                function  (values) {
+                                function(values) {
 
-                                  var fr = new FileReader();
-                                  fr.onload = function () {
-                                    processAfterRead(trumbowyg, file, prefix, values, fr.result);
-                                  }
-                                  var fileContents = fr.readAsDataURL(file);
+                                    var fr = new FileReader();
+                                    fr.onload = function() {
+                                        processAfterRead(trumbowyg, file, prefix, values, fr.result);
+                                    }
+                                    var fileContents = fr.readAsDataURL(file);
                                 }
                             );
 
-                            $('input[type=file]').on('change', function (e) {
+                            $('input[type=file]').on('change', function(e) {
                                 // We just get the first.
                                 file = e.target.files[0];
                             });
