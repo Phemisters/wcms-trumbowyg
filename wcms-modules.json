@@ -6,8 +6,8 @@
             "repo": "https://github.com/Phemisters/wcms-trumbowyg/tree/main",
             "zip": "https://github.com/Phemisters/wcms-trumbowyg/archive/main.zip",
             "summary": "Adds a Trumbowyg WYSIWYG editor to all content editable fields.",
-            "version": "1.0.3",
-            "image": "https://raw.githubusercontent.com/Phemisters/wcms-trumbowyg/main/preview.jpg"
+            "version": "1.0.4",
+            "image": "https://raw.githubusercontent.com/Phemisters/wcms-trumbowyg/main/preview.png"
         }
     }
 }
